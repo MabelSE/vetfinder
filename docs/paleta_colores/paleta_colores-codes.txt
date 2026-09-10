@@ -1,0 +1,11 @@
+Your selected colors:
+
+    Text: #080618 - rgb(8, 6, 24) - hsl(247, 60%, 6%)
+    Background: #f7f8ff - rgb(247, 248, 255) - hsl(233, 100%, 98%)
+    Primary: #25b1d4 - rgb(37, 177, 212) - hsl(192, 70%, 49%)
+    Secondary: #f5eee0 - rgb(245, 238, 224) - hsl(40, 51%, 92%)
+    Accent: #8fdc4c - rgb(143, 220, 76) - hsl(92, 67%, 58%)
+
+Realtime Colors link for selected colors: https://www.realtimecolors.com/?colors=080618-f7f8ff-25b1d4-f5eee0-8fdc4c&fonts=Inter-Inter
+
+Thanks for using RealtimeColors.com!

@@ -1,0 +1,29 @@
+# Dependencias y builds
+node_modules/
+frontend/dist/
+frontend/dist-ssr/
+
+# Entorno
+.env
+.env.*
+!.env.example
+!**/.env.example
+
+# Sesiones y logs
+backend/sesiones/
+logs/
+*.log
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Editores y herramientas locales
+.vscode/
+.idea/
+.cursor/
+AGENTS.md
+
+# Temporales de preparación
+sql/_schema_dump.json
+backend/_tmp*.js

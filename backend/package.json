@@ -1,0 +1,21 @@
+{
+  "name": "vetfinder-backend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch --env-file=.env src/app.js",
+    "start": "node --env-file=.env src/app.js",
+    "test": "node --test src/utils/prioridadUrgencia.test.js src/utils/nombrePublico.test.js src/validators/valoracionValidator.test.js src/validators/veterinariaAdminValidator.test.js src/validators/superadminValidator.test.js"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cloudinary": "^2.10.1",
+    "express": "^5.1.0",
+    "express-session": "^1.19.0",
+    "multer": "^2.2.0",
+    "pdfkit": "^0.20.1",
+    "pg": "^8.16.3",
+    "session-file-store": "^1.5.0"
+  }
+}
