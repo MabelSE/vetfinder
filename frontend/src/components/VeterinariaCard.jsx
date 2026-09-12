@@ -33,15 +33,22 @@ function VeterinariaCard({ veterinaria, mostrarLlamar = false }) {
     || (veterinaria.servicios && veterinaria.servicios.length > 0)
   );
   const mostrarBotonLlamar = mostrarLlamar && Boolean(veterinaria.telefono);
+  const rutaFicha = `/veterinarias/${veterinaria.idVeterinaria}`;
 
   return (
     <li className="tarjeta tarjeta-veterinaria">
       {veterinaria.fotografiaPrincipal ? (
-        <img
-          src={veterinaria.fotografiaPrincipal}
-          alt=""
-          className="tarjeta-veterinaria__foto"
-        />
+        <Link
+          to={rutaFicha}
+          className="tarjeta-veterinaria__foto-enlace"
+          aria-label={`Ver ficha de ${veterinaria.nombreComercial}`}
+        >
+          <img
+            src={veterinaria.fotografiaPrincipal}
+            alt=""
+            className="tarjeta-veterinaria__foto"
+          />
+        </Link>
       ) : (
         <div className="tarjeta-veterinaria__foto-vacia">Sin fotografía</div>
       )}
@@ -71,7 +78,7 @@ function VeterinariaCard({ veterinaria, mostrarLlamar = false }) {
               Llamar
             </a>
           ) : null}
-          <Link className="boton-contorno" to={`/veterinarias/${veterinaria.idVeterinaria}`}>
+          <Link className="boton-contorno" to={rutaFicha}>
             Ver ficha
           </Link>
         </div>

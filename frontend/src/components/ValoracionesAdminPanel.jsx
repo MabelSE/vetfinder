@@ -93,14 +93,16 @@ function ValoracionesAdminPanel({ tituloComo = 'h2' }) {
         {valoraciones.map((valoracion) => (
           <li key={valoracion.idValoracion} className="tarjeta tarjeta-valoracion">
             <div className="tarjeta-valoracion__cabecera">
-              <p className="tarjeta-valoracion__autor">{valoracion.autor}</p>
+              <div className="tarjeta-valoracion__identidad">
+                <p className="tarjeta-valoracion__autor">{valoracion.autor}</p>
+                <p className="tarjeta-valoracion__mascota">
+                  {valoracion.mascota.nombre} · {valoracion.mascota.nombreEspecie}
+                </p>
+              </div>
               <div className="tarjeta-valoracion__puntuacion">
                 <EstrellasPuntuacion valor={valoracion.puntuacion} />
               </div>
             </div>
-            <p className="tarjeta-valoracion__mascota">
-              {valoracion.mascota.nombre} · {valoracion.mascota.nombreEspecie}
-            </p>
             {valoracion.comentario ? <p>{valoracion.comentario}</p> : <p>Sin comentario.</p>}
             <p className="ayuda-campo">{formatearFechaCorta(valoracion.fechaPublicacion)}</p>
             {valoracion.tieneReportePendiente ? (

@@ -480,57 +480,73 @@ function FichaMascota() {
           onSubmit={guardarVacuna}
         >
           <h3>{idVacunaEditando ? 'Editar vacuna' : 'Nueva vacuna'}</h3>
-          <label htmlFor="vacunaNombre">Nombre</label>
-          <input
-            id="vacunaNombre"
-            value={vacunaForm.nombre}
-            onChange={(evento) => setVacunaForm({ ...vacunaForm, nombre: evento.target.value })}
-            required
-            maxLength={150}
-          />
-          <label htmlFor="vacunaFecha">Fecha de aplicación</label>
-          <input
-            id="vacunaFecha"
-            type="date"
-            value={vacunaForm.fechaAplicacion}
-            onChange={(evento) => setVacunaForm({ ...vacunaForm, fechaAplicacion: evento.target.value })}
-            required
-          />
-          <label htmlFor="vacunaProxima">Próxima fecha (opcional)</label>
-          <input
-            id="vacunaProxima"
-            type="date"
-            value={vacunaForm.proximaFecha}
-            onChange={(evento) => setVacunaForm({ ...vacunaForm, proximaFecha: evento.target.value })}
-          />
-          <p className="ayuda-campo">Comprobante (opcional)</p>
-          <CampoFotografia
-            id="comprobanteVacuna"
-            urlActual={vacunaForm.fotografiaComprobante}
-            archivo={archivoComprobante}
-            eliminarFotografia={quitarComprobante}
-            textoSubir="Subir comprobante"
-            textoQuitar="Quitar comprobante"
-            onArchivo={(archivo, errorArchivo) => {
-              setArchivoComprobante(archivo);
-              setQuitarComprobante(false);
-              setError(errorArchivo);
-            }}
-            onEliminar={() => {
-              setError('');
-              if (archivoComprobante) {
-                setArchivoComprobante(null);
-                return;
-              }
-              setQuitarComprobante(Boolean(vacunaForm.fotografiaComprobante));
-            }}
-          />
-          <label htmlFor="vacunaObs">Observación (opcional)</label>
-          <textarea
-            id="vacunaObs"
-            value={vacunaForm.observacion}
-            onChange={(evento) => setVacunaForm({ ...vacunaForm, observacion: evento.target.value })}
-          />
+          <div className="formulario-vacuna">
+            <div className="formulario-vacuna__principal">
+              <div>
+                <label htmlFor="vacunaNombre">Nombre</label>
+                <input
+                  id="vacunaNombre"
+                  value={vacunaForm.nombre}
+                  onChange={(evento) => setVacunaForm({ ...vacunaForm, nombre: evento.target.value })}
+                  required
+                  maxLength={150}
+                />
+              </div>
+              <div>
+                <span className="formulario-vacuna__etiqueta">Comprobante (opcional)</span>
+                <CampoFotografia
+                  id="comprobanteVacuna"
+                  compacto
+                  urlActual={vacunaForm.fotografiaComprobante}
+                  archivo={archivoComprobante}
+                  eliminarFotografia={quitarComprobante}
+                  textoSubir="Subir comprobante"
+                  textoCambiar="Cambiar comprobante"
+                  textoQuitar="Quitar comprobante"
+                  onArchivo={(archivo, errorArchivo) => {
+                    setArchivoComprobante(archivo);
+                    setQuitarComprobante(false);
+                    setError(errorArchivo);
+                  }}
+                  onEliminar={() => {
+                    setError('');
+                    if (archivoComprobante) {
+                      setArchivoComprobante(null);
+                      return;
+                    }
+                    setQuitarComprobante(Boolean(vacunaForm.fotografiaComprobante));
+                  }}
+                />
+              </div>
+            </div>
+            <div className="grupo-campos grupo-campos--dos">
+              <div>
+                <label htmlFor="vacunaFecha">Fecha de aplicación</label>
+                <input
+                  id="vacunaFecha"
+                  type="date"
+                  value={vacunaForm.fechaAplicacion}
+                  onChange={(evento) => setVacunaForm({ ...vacunaForm, fechaAplicacion: evento.target.value })}
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="vacunaProxima">Próxima fecha (opcional)</label>
+                <input
+                  id="vacunaProxima"
+                  type="date"
+                  value={vacunaForm.proximaFecha}
+                  onChange={(evento) => setVacunaForm({ ...vacunaForm, proximaFecha: evento.target.value })}
+                />
+              </div>
+            </div>
+            <label htmlFor="vacunaObs">Observación (opcional)</label>
+            <textarea
+              id="vacunaObs"
+              value={vacunaForm.observacion}
+              onChange={(evento) => setVacunaForm({ ...vacunaForm, observacion: evento.target.value })}
+            />
+          </div>
           <div className="acciones-formulario">
             <button type="submit" className="boton-contorno boton-pill">
               {idVacunaEditando ? 'Guardar cambios' : 'Agregar vacuna'}
@@ -589,21 +605,27 @@ function FichaMascota() {
         </ul>
         <form key={idEnfermedadEditando || 'crear-enfermedad'} className="formulario" onSubmit={guardarEnfermedad}>
           <h3>{idEnfermedadEditando ? 'Editar enfermedad' : 'Nueva enfermedad'}</h3>
-          <label htmlFor="enfDesc">Descripción</label>
-          <input
-            id="enfDesc"
-            value={enfermedadForm.nombreDescripcion}
-            onChange={(evento) => setEnfermedadForm({ ...enfermedadForm, nombreDescripcion: evento.target.value })}
-            required
-            maxLength={200}
-          />
-          <label htmlFor="enfFecha">Fecha de diagnóstico (opcional)</label>
-          <input
-            id="enfFecha"
-            type="date"
-            value={enfermedadForm.fechaDiagnostico}
-            onChange={(evento) => setEnfermedadForm({ ...enfermedadForm, fechaDiagnostico: evento.target.value })}
-          />
+          <div className="grupo-campos grupo-campos--dos">
+            <div>
+              <label htmlFor="enfDesc">Descripción</label>
+              <input
+                id="enfDesc"
+                value={enfermedadForm.nombreDescripcion}
+                onChange={(evento) => setEnfermedadForm({ ...enfermedadForm, nombreDescripcion: evento.target.value })}
+                required
+                maxLength={200}
+              />
+            </div>
+            <div>
+              <label htmlFor="enfFecha">Fecha de diagnóstico (opcional)</label>
+              <input
+                id="enfFecha"
+                type="date"
+                value={enfermedadForm.fechaDiagnostico}
+                onChange={(evento) => setEnfermedadForm({ ...enfermedadForm, fechaDiagnostico: evento.target.value })}
+              />
+            </div>
+          </div>
           <label htmlFor="enfObs">Observación (opcional)</label>
           <textarea
             id="enfObs"

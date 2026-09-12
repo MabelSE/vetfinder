@@ -333,15 +333,17 @@ function FormularioMascota({
               <h3>Enfermedades</h3>
               {enfermedades.map((enfermedad, indice) => (
                 <div key={`enfermedad-${indice}`} className="subbloque-formulario">
-                  <label htmlFor={`enfermedadDesc-${indice}`}>Descripción</label>
-                  <input
-                    id={`enfermedadDesc-${indice}`}
-                    value={enfermedad.nombreDescripcion}
-                    onChange={(evento) => actualizarLista(setEnfermedades, indice, 'nombreDescripcion', evento.target.value)}
-                    maxLength={200}
-                    placeholder="Diagnósticos actuales o crónicos..."
-                  />
                   <div className="grupo-campos grupo-campos--dos">
+                    <div>
+                      <label htmlFor={`enfermedadDesc-${indice}`}>Descripción</label>
+                      <input
+                        id={`enfermedadDesc-${indice}`}
+                        value={enfermedad.nombreDescripcion}
+                        onChange={(evento) => actualizarLista(setEnfermedades, indice, 'nombreDescripcion', evento.target.value)}
+                        maxLength={200}
+                        placeholder="Diagnósticos actuales o crónicos..."
+                      />
+                    </div>
                     <div>
                       <label htmlFor={`enfermedadFecha-${indice}`}>Fecha de diagnóstico (opcional)</label>
                       <input
@@ -351,15 +353,13 @@ function FormularioMascota({
                         onChange={(evento) => actualizarLista(setEnfermedades, indice, 'fechaDiagnostico', evento.target.value)}
                       />
                     </div>
-                    <div>
-                      <label htmlFor={`enfermedadObs-${indice}`}>Observación (opcional)</label>
-                      <input
-                        id={`enfermedadObs-${indice}`}
-                        value={enfermedad.observacion}
-                        onChange={(evento) => actualizarLista(setEnfermedades, indice, 'observacion', evento.target.value)}
-                      />
-                    </div>
                   </div>
+                  <label htmlFor={`enfermedadObs-${indice}`}>Observación (opcional)</label>
+                  <input
+                    id={`enfermedadObs-${indice}`}
+                    value={enfermedad.observacion}
+                    onChange={(evento) => actualizarLista(setEnfermedades, indice, 'observacion', evento.target.value)}
+                  />
                 </div>
               ))}
               <button
@@ -498,57 +498,67 @@ function FormularioMascota({
             <div className="bloque-formulario__cuerpo">
               {vacunas.map((vacuna, indice) => (
                 <div key={`vacuna-${indice}`} className="subbloque-formulario">
-                  <label htmlFor={`vacunaNombre-${indice}`}>Nombre de la vacuna</label>
-                  <input
-                    id={`vacunaNombre-${indice}`}
-                    value={vacuna.nombre}
-                    onChange={(evento) => actualizarLista(setVacunas, indice, 'nombre', evento.target.value)}
-                    maxLength={150}
-                  />
-                  <div className="grupo-campos grupo-campos--dos">
-                    <div>
-                      <label htmlFor={`vacunaFecha-${indice}`}>Fecha de aplicación</label>
-                      <input
-                        id={`vacunaFecha-${indice}`}
-                        type="date"
-                        value={vacuna.fechaAplicacion}
-                        onChange={(evento) => actualizarLista(setVacunas, indice, 'fechaAplicacion', evento.target.value)}
-                      />
+                  <div className="formulario-vacuna">
+                    <div className="formulario-vacuna__principal">
+                      <div>
+                        <label htmlFor={`vacunaNombre-${indice}`}>Nombre de la vacuna</label>
+                        <input
+                          id={`vacunaNombre-${indice}`}
+                          value={vacuna.nombre}
+                          onChange={(evento) => actualizarLista(setVacunas, indice, 'nombre', evento.target.value)}
+                          maxLength={150}
+                        />
+                      </div>
+                      <div>
+                        <span className="formulario-vacuna__etiqueta">Comprobante (opcional)</span>
+                        <CampoFotografia
+                          id={`comprobante-vacuna-${indice}`}
+                          compacto
+                          urlActual=""
+                          archivo={vacuna.archivoComprobante}
+                          eliminarFotografia={false}
+                          textoSubir="Subir comprobante"
+                          textoCambiar="Cambiar comprobante"
+                          textoQuitar="Quitar comprobante"
+                          onArchivo={(archivo, errorArchivo) => {
+                            setErrorLocal(errorArchivo);
+                            actualizarLista(setVacunas, indice, 'archivoComprobante', archivo);
+                          }}
+                          onEliminar={() => {
+                            setErrorLocal('');
+                            actualizarLista(setVacunas, indice, 'archivoComprobante', null);
+                          }}
+                        />
+                      </div>
                     </div>
-                    <div>
-                      <label htmlFor={`vacunaProxima-${indice}`}>Próxima fecha (opcional)</label>
-                      <input
-                        id={`vacunaProxima-${indice}`}
-                        type="date"
-                        value={vacuna.proximaFecha}
-                        onChange={(evento) => actualizarLista(setVacunas, indice, 'proximaFecha', evento.target.value)}
-                      />
+                    <div className="grupo-campos grupo-campos--dos">
+                      <div>
+                        <label htmlFor={`vacunaFecha-${indice}`}>Fecha de aplicación</label>
+                        <input
+                          id={`vacunaFecha-${indice}`}
+                          type="date"
+                          value={vacuna.fechaAplicacion}
+                          onChange={(evento) => actualizarLista(setVacunas, indice, 'fechaAplicacion', evento.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor={`vacunaProxima-${indice}`}>Próxima fecha (opcional)</label>
+                        <input
+                          id={`vacunaProxima-${indice}`}
+                          type="date"
+                          value={vacuna.proximaFecha}
+                          onChange={(evento) => actualizarLista(setVacunas, indice, 'proximaFecha', evento.target.value)}
+                        />
+                      </div>
                     </div>
+                    <label htmlFor={`vacunaObs-${indice}`}>Observación (opcional)</label>
+                    <textarea
+                      id={`vacunaObs-${indice}`}
+                      rows="3"
+                      value={vacuna.observacion}
+                      onChange={(evento) => actualizarLista(setVacunas, indice, 'observacion', evento.target.value)}
+                    />
                   </div>
-                  <p className="ayuda-campo">Comprobante (opcional)</p>
-                  <CampoFotografia
-                    id={`comprobante-vacuna-${indice}`}
-                    urlActual=""
-                    archivo={vacuna.archivoComprobante}
-                    eliminarFotografia={false}
-                    textoSubir="Subir comprobante"
-                    textoQuitar="Quitar comprobante"
-                    onArchivo={(archivo, errorArchivo) => {
-                      setErrorLocal(errorArchivo);
-                      actualizarLista(setVacunas, indice, 'archivoComprobante', archivo);
-                    }}
-                    onEliminar={() => {
-                      setErrorLocal('');
-                      actualizarLista(setVacunas, indice, 'archivoComprobante', null);
-                    }}
-                  />
-                  <label htmlFor={`vacunaObs-${indice}`}>Observación (opcional)</label>
-                  <textarea
-                    id={`vacunaObs-${indice}`}
-                    rows="3"
-                    value={vacuna.observacion}
-                    onChange={(evento) => actualizarLista(setVacunas, indice, 'observacion', evento.target.value)}
-                  />
                 </div>
               ))}
               <button
