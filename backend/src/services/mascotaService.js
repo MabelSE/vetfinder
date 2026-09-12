@@ -15,7 +15,7 @@ import {
   validarArchivoFotografia,
 } from './fotografiaService.js';
 import { armarPdfMascota } from './pdfMascotaService.js';
-import { listarVacunas } from './vacunaService.js';
+import { asegurarEliminacionComprobantesVacunas, listarVacunas } from './vacunaService.js';
 import { listarEnfermedades } from './enfermedadService.js';
 import { listarAlergias } from './alergiaService.js';
 
@@ -107,6 +107,8 @@ export async function eliminarMascota(idMascota, idUsuario) {
     );
   }
 
+  const vacunas = await listarVacunas(idMascota);
+  await asegurarEliminacionComprobantesVacunas(vacunas, idMascota);
   await eliminarRegistrosAsociadosYMascota(idMascota);
 
   try {

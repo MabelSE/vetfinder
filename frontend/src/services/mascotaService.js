@@ -77,6 +77,28 @@ export async function actualizarVacuna(idMascota, idVacuna, datos) {
   return respuesta.vacuna;
 }
 
+export async function actualizarComprobanteVacuna(idMascota, idVacuna, archivo) {
+  const formulario = new FormData();
+  formulario.append('fotografia', archivo);
+
+  const respuesta = await solicitarApi(
+    `/api/mascotas/${idMascota}/vacunas/${idVacuna}/comprobante`,
+    {
+      method: 'PUT',
+      cuerpo: formulario,
+    }
+  );
+  return respuesta.vacuna;
+}
+
+export async function eliminarComprobanteVacuna(idMascota, idVacuna) {
+  const respuesta = await solicitarApi(
+    `/api/mascotas/${idMascota}/vacunas/${idVacuna}/comprobante`,
+    { method: 'DELETE' }
+  );
+  return respuesta.vacuna;
+}
+
 export async function eliminarVacuna(idMascota, idVacuna) {
   await solicitarApi(`/api/mascotas/${idMascota}/vacunas/${idVacuna}`, { method: 'DELETE' });
 }

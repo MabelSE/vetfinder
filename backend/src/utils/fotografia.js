@@ -12,6 +12,10 @@ export function obtenerPublicIdFotografiaVeterinaria(idVeterinaria, idFotografia
   return `vetfinder/veterinarias/${idVeterinaria}/${idFotografiaVeterinaria}`;
 }
 
+export function obtenerPublicIdComprobanteVacuna(idMascota, idVacuna) {
+  return `vetfinder/mascotas/${idMascota}/vacunas/${idVacuna}`;
+}
+
 export function extraerPublicIdCloudinary(url) {
   if (!url) {
     return null;

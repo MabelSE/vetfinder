@@ -2,8 +2,10 @@ import { crearError } from '../utils/errorHttp.js';
 import { parsearId } from '../utils/identificador.js';
 import { validarDatosVacuna } from '../validators/mascotaValidator.js';
 import {
+  actualizarComprobanteVacuna,
   actualizarVacuna,
   crearVacuna,
+  eliminarComprobanteVacuna,
   eliminarVacuna,
   listarVacunas,
 } from '../services/vacunaService.js';
@@ -50,6 +52,38 @@ export async function actualizarVacunaDeMascota(req, res, next) {
     }
 
     const vacuna = await actualizarVacuna(req.mascota.idMascota, id, datos);
+    res.json({ vacuna });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function actualizarComprobanteDeVacuna(req, res, next) {
+  try {
+    const { id, error } = parsearId(req.params.idVacuna, 'vacuna');
+
+    if (error) {
+      next(crearError(400, error));
+      return;
+    }
+
+    const vacuna = await actualizarComprobanteVacuna(req.mascota.idMascota, id, req.file);
+    res.json({ vacuna });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function eliminarComprobanteDeVacuna(req, res, next) {
+  try {
+    const { id, error } = parsearId(req.params.idVacuna, 'vacuna');
+
+    if (error) {
+      next(crearError(400, error));
+      return;
+    }
+
+    const vacuna = await eliminarComprobanteVacuna(req.mascota.idMascota, id);
     res.json({ vacuna });
   } catch (error) {
     next(error);

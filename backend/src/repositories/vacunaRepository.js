@@ -54,7 +54,7 @@ export async function crearVacuna(idMascota, datos) {
       datos.nombre,
       datos.fechaAplicacion,
       datos.proximaFecha,
-      datos.fotografiaComprobante,
+      null,
       datos.observacion,
     ]
   );
@@ -68,17 +68,26 @@ export async function actualizarVacuna(idVacuna, datos) {
      SET nombre = $1,
          fecha_aplicacion = $2,
          proxima_fecha = $3,
-         fotografia_comprobante = $4,
-         observacion = $5
-     WHERE id_vacuna = $6`,
+         observacion = $4
+     WHERE id_vacuna = $5`,
     [
       datos.nombre,
       datos.fechaAplicacion,
       datos.proximaFecha,
-      datos.fotografiaComprobante,
       datos.observacion,
       idVacuna,
     ]
+  );
+
+  return obtenerVacunaPorId(idVacuna);
+}
+
+export async function actualizarFotografiaComprobante(idVacuna, urlComprobante) {
+  await pool.query(
+    `UPDATE vacuna
+     SET fotografia_comprobante = $2
+     WHERE id_vacuna = $1`,
+    [idVacuna, urlComprobante]
   );
 
   return obtenerVacunaPorId(idVacuna);

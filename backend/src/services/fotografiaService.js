@@ -7,6 +7,7 @@ import { crearError } from '../utils/errorHttp.js';
 import {
   esUrlDeNuestroCloudinary,
   extraerPublicIdCloudinary,
+  obtenerPublicIdComprobanteVacuna,
   obtenerPublicIdFotografiaVeterinaria,
   obtenerPublicIdMascota,
   validarContenidoFotografia,
@@ -109,6 +110,28 @@ function subirImagenCloudinary(publicId, buffer) {
 export async function subirFotografiaVeterinaria(idVeterinaria, idFotografiaVeterinaria, buffer) {
   const publicId = obtenerPublicIdFotografiaVeterinaria(idVeterinaria, idFotografiaVeterinaria);
   return subirImagenCloudinary(publicId, buffer);
+}
+
+export async function subirComprobanteVacuna(idMascota, idVacuna, buffer) {
+  const publicId = obtenerPublicIdComprobanteVacuna(idMascota, idVacuna);
+  return subirImagenCloudinary(publicId, buffer);
+}
+
+export async function destruirComprobanteVacuna(urlFotografia, idMascota, idVacuna) {
+  const credenciales = obtenerCredencialesCloudinary();
+
+  if (!urlFotografia || !credenciales || !esUrlDeNuestroCloudinary(urlFotografia, credenciales.cloudName)) {
+    return;
+  }
+
+  const publicId = extraerPublicIdCloudinary(urlFotografia)
+    || obtenerPublicIdComprobanteVacuna(idMascota, idVacuna);
+  const cliente = obtenerClienteCloudinary();
+  const resultado = await cliente.uploader.destroy(publicId);
+
+  if (resultado.result !== 'ok' && resultado.result !== 'not found') {
+    throw crearError(502, 'No fue posible eliminar la fotografía.');
+  }
 }
 
 export async function destruirFotografiaVeterinaria(urlFotografia, idVeterinaria, idFotografiaVeterinaria) {

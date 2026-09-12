@@ -7,6 +7,7 @@ import {
   crearAlergia,
   crearEnfermedad,
   crearMascota,
+  actualizarComprobanteVacuna,
   crearVacuna,
   eliminarFotografia,
   obtenerMascota,
@@ -90,8 +91,26 @@ function MascotaFormulario() {
         for (const alergia of salud?.alergias || []) {
           await crearAlergia(idMascota, alergia);
         }
+        let errorComprobante = '';
         for (const vacuna of salud?.vacunas || []) {
-          await crearVacuna(idMascota, vacuna);
+          const { archivoComprobante, ...datosVacuna } = vacuna;
+          const creada = await crearVacuna(idMascota, datosVacuna);
+
+          if (archivoComprobante) {
+            try {
+              await actualizarComprobanteVacuna(idMascota, creada.idVacuna, archivoComprobante);
+            } catch (err) {
+              errorComprobante = `La vacuna ${creada.nombre} fue guardada, pero el comprobante no pudo cargarse. Puedes adjuntarlo más tarde. ${err.message}`;
+            }
+          }
+        }
+
+        if (errorComprobante) {
+          navigate(`/mascotas/${mascota.idMascota}`, {
+            replace: true,
+            state: { error: errorComprobante },
+          });
+          return;
         }
       }
 

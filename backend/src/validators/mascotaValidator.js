@@ -116,7 +116,6 @@ export function validarDatosVacuna(cuerpo) {
   const nombre = typeof cuerpo?.nombre === 'string' ? cuerpo.nombre.trim() : '';
   const fechaAplicacion = fechaOpcional(cuerpo?.fechaAplicacion, 'fecha de aplicación');
   const proximaFecha = fechaOpcional(cuerpo?.proximaFecha, 'próxima fecha');
-  const fotografiaComprobante = textoOpcional(cuerpo?.fotografiaComprobante, 500, 'fotografía del comprobante');
   const observacion = textoOpcional(cuerpo?.observacion, 10000, 'observación');
 
   if (!nombre) {
@@ -137,10 +136,6 @@ export function validarDatosVacuna(cuerpo) {
     errores.push('La próxima fecha no puede ser anterior a la fecha de aplicación.');
   }
 
-  if (fotografiaComprobante.error) {
-    errores.push(fotografiaComprobante.error);
-  }
-
   if (observacion.error) {
     errores.push(observacion.error);
   }
@@ -151,7 +146,6 @@ export function validarDatosVacuna(cuerpo) {
       nombre,
       fechaAplicacion: fechaAplicacion.valor ?? null,
       proximaFecha: proximaFecha.valor ?? null,
-      fotografiaComprobante: fotografiaComprobante.valor ?? null,
       observacion: observacion.valor ?? null,
     },
   };

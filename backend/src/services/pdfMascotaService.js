@@ -165,7 +165,7 @@ async function construirDocumento({ mascota, vacunas, enfermedades, alergias, se
       escribirParrafo(doc, 'No hay vacunas registradas.');
     } else {
       vacunas.forEach((vacuna, indice) => {
-        asegurarEspacio(doc, 48);
+        asegurarEspacio(doc, 62);
         doc.font('Ficha-Bold').text(vacuna.nombre || 'Vacuna');
         doc.font('Ficha').text(
           `Fecha de aplicación: ${formatearFechaLegible(vacuna.fechaAplicacion) || 'No registrada'}`
@@ -173,6 +173,9 @@ async function construirDocumento({ mascota, vacunas, enfermedades, alergias, se
         doc.text(`Próxima fecha: ${formatearFechaLegible(vacuna.proximaFecha) || 'No registrada'}`);
         if (vacuna.observacion) {
           doc.text(`Observación: ${vacuna.observacion}`);
+        }
+        if (vacuna.fotografiaComprobante) {
+          doc.text('Comprobante adjunto');
         }
         if (indice < vacunas.length - 1) {
           doc.moveDown(0.35);

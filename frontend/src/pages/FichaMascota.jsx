@@ -1,14 +1,17 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import CampoFotografia from '../components/CampoFotografia.jsx';
 import SeleccionSeccionesPdf from '../components/SeleccionSeccionesPdf.jsx';
 import {
   actualizarAlergia,
+  actualizarComprobanteVacuna,
   actualizarEnfermedad,
   actualizarMascota,
   actualizarVacuna,
   crearAlergia,
   crearEnfermedad,
   crearVacuna,
+  eliminarComprobanteVacuna,
   eliminarAlergia,
   eliminarEnfermedad,
   eliminarMascota,
@@ -73,6 +76,8 @@ function FichaMascota() {
   const [mensaje, setMensaje] = useState('');
   const [cargando, setCargando] = useState(true);
   const [vacunaForm, setVacunaForm] = useState(VACUNA_VACIA);
+  const [archivoComprobante, setArchivoComprobante] = useState(null);
+  const [quitarComprobante, setQuitarComprobante] = useState(false);
   const [idVacunaEditando, setIdVacunaEditando] = useState(null);
   const [enfermedadForm, setEnfermedadForm] = useState(ENFERMEDAD_VACIA);
   const [idEnfermedadEditando, setIdEnfermedadEditando] = useState(null);
@@ -155,6 +160,14 @@ function FichaMascota() {
     }
   }
 
+  function reiniciarFormularioVacuna() {
+    setVacunaForm(VACUNA_VACIA);
+    setArchivoComprobante(null);
+    setQuitarComprobante(false);
+    setIdVacunaEditando(null);
+    setClaveFormVacuna((actual) => actual + 1);
+  }
+
   async function guardarVacuna(evento) {
     evento.preventDefault();
     const idEditando = idVacunaEditando;
@@ -162,7 +175,6 @@ function FichaMascota() {
       nombre: vacunaForm.nombre.trim(),
       fechaAplicacion: vacunaForm.fechaAplicacion,
       proximaFecha: vacunaForm.proximaFecha || null,
-      fotografiaComprobante: vacunaForm.fotografiaComprobante.trim() || null,
       observacion: vacunaForm.observacion.trim() || null,
     };
 
@@ -171,19 +183,46 @@ function FichaMascota() {
       return;
     }
 
-    await guardarRegistroAntecedente({
-      evento,
-      idEditando,
-      datos,
-      crear: (cuerpo) => crearVacuna(id, cuerpo),
-      actualizar: (idRegistro, cuerpo) => actualizarVacuna(id, idRegistro, cuerpo),
-      alExito: () => {
-        setVacunaForm(VACUNA_VACIA);
-        setIdVacunaEditando(null);
-        setClaveFormVacuna((actual) => actual + 1);
-      },
-      mensajeExito: idEditando ? 'Vacuna actualizada.' : 'Vacuna registrada.',
-    });
+    setError('');
+    setMensaje('');
+
+    try {
+      if (idEditando) {
+        await actualizarVacuna(id, idEditando, datos);
+
+        if (archivoComprobante) {
+          await actualizarComprobanteVacuna(id, idEditando, archivoComprobante);
+        } else if (quitarComprobante) {
+          await eliminarComprobanteVacuna(id, idEditando);
+        }
+
+        await cargar();
+        reiniciarFormularioVacuna();
+        setMensaje('Vacuna actualizada.');
+        return;
+      }
+
+      const vacuna = await crearVacuna(id, datos);
+
+      if (archivoComprobante) {
+        try {
+          await actualizarComprobanteVacuna(id, vacuna.idVacuna, archivoComprobante);
+        } catch (err) {
+          await cargar();
+          reiniciarFormularioVacuna();
+          setError(
+            `La vacuna fue guardada, pero el comprobante no pudo cargarse. Puedes adjuntarlo más tarde. ${err.message}`
+          );
+          return;
+        }
+      }
+
+      await cargar();
+      reiniciarFormularioVacuna();
+      setMensaje('Vacuna registrada.');
+    } catch (err) {
+      setError(err.message);
+    }
   }
 
   async function guardarEnfermedad(evento) {
@@ -400,6 +439,9 @@ function FichaMascota() {
                 <strong>{vacuna.nombre}</strong>
                 <span> · Aplicada: {vacuna.fechaAplicacion}</span>
                 {vacuna.proximaFecha ? <span> · Próxima: {vacuna.proximaFecha}</span> : null}
+                {vacuna.fotografiaComprobante ? (
+                  <span> · Comprobante adjunto</span>
+                ) : null}
               </div>
               <div className="lista-antecedente__acciones">
                 <button
@@ -414,6 +456,8 @@ function FichaMascota() {
                       fotografiaComprobante: vacuna.fotografiaComprobante || '',
                       observacion: vacuna.observacion || '',
                     });
+                    setArchivoComprobante(null);
+                    setQuitarComprobante(false);
                     setError('');
                   }}
                 >
@@ -459,15 +503,27 @@ function FichaMascota() {
             value={vacunaForm.proximaFecha}
             onChange={(evento) => setVacunaForm({ ...vacunaForm, proximaFecha: evento.target.value })}
           />
-          <label htmlFor="vacunaFoto">URL del comprobante (opcional)</label>
-          <input
-            id="vacunaFoto"
-            type="text"
-            inputMode="url"
-            value={vacunaForm.fotografiaComprobante}
-            onChange={(evento) => setVacunaForm({ ...vacunaForm, fotografiaComprobante: evento.target.value })}
-            maxLength={500}
-            placeholder="https://ejemplo.com/comprobante.jpg"
+          <p className="ayuda-campo">Comprobante (opcional)</p>
+          <CampoFotografia
+            id="comprobanteVacuna"
+            urlActual={vacunaForm.fotografiaComprobante}
+            archivo={archivoComprobante}
+            eliminarFotografia={quitarComprobante}
+            textoSubir="Subir comprobante"
+            textoQuitar="Quitar comprobante"
+            onArchivo={(archivo, errorArchivo) => {
+              setArchivoComprobante(archivo);
+              setQuitarComprobante(false);
+              setError(errorArchivo);
+            }}
+            onEliminar={() => {
+              setError('');
+              if (archivoComprobante) {
+                setArchivoComprobante(null);
+                return;
+              }
+              setQuitarComprobante(Boolean(vacunaForm.fotografiaComprobante));
+            }}
           />
           <label htmlFor="vacunaObs">Observación (opcional)</label>
           <textarea
@@ -484,8 +540,7 @@ function FichaMascota() {
                 type="button"
                 className="boton-contorno boton-pill"
                 onClick={() => {
-                  setVacunaForm(VACUNA_VACIA);
-                  setIdVacunaEditando(null);
+                  reiniciarFormularioVacuna();
                   setError('');
                 }}
               >

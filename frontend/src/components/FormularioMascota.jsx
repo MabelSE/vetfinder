@@ -30,7 +30,7 @@ const VACUNA_VACIA = {
   nombre: '',
   fechaAplicacion: '',
   proximaFecha: '',
-  fotografiaComprobante: '',
+  archivoComprobante: null,
   observacion: '',
 };
 
@@ -120,8 +120,8 @@ function FormularioMascota({
         nombre: item.nombre.trim(),
         fechaAplicacion: item.fechaAplicacion,
         proximaFecha: item.proximaFecha || null,
-        fotografiaComprobante: item.fotografiaComprobante.trim() || null,
         observacion: item.observacion.trim() || null,
+        archivoComprobante: item.archivoComprobante || null,
       }))
       .filter((item) => item.nombre || item.fechaAplicacion);
   }
@@ -525,15 +525,22 @@ function FormularioMascota({
                       />
                     </div>
                   </div>
-                  <label htmlFor={`vacunaFoto-${indice}`}>URL del comprobante (opcional)</label>
-                  <input
-                    id={`vacunaFoto-${indice}`}
-                    type="text"
-                    inputMode="url"
-                    value={vacuna.fotografiaComprobante}
-                    onChange={(evento) => actualizarLista(setVacunas, indice, 'fotografiaComprobante', evento.target.value)}
-                    maxLength={500}
-                    placeholder="https://ejemplo.com/comprobante.jpg"
+                  <p className="ayuda-campo">Comprobante (opcional)</p>
+                  <CampoFotografia
+                    id={`comprobante-vacuna-${indice}`}
+                    urlActual=""
+                    archivo={vacuna.archivoComprobante}
+                    eliminarFotografia={false}
+                    textoSubir="Subir comprobante"
+                    textoQuitar="Quitar comprobante"
+                    onArchivo={(archivo, errorArchivo) => {
+                      setErrorLocal(errorArchivo);
+                      actualizarLista(setVacunas, indice, 'archivoComprobante', archivo);
+                    }}
+                    onEliminar={() => {
+                      setErrorLocal('');
+                      actualizarLista(setVacunas, indice, 'archivoComprobante', null);
+                    }}
                   />
                   <label htmlFor={`vacunaObs-${indice}`}>Observación (opcional)</label>
                   <textarea

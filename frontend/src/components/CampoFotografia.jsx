@@ -1,7 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { validarArchivoFotografia } from '../utils/fotografia.js';
 
-function CampoFotografia({ urlActual, archivo, eliminarFotografia, onArchivo, onEliminar }) {
+function CampoFotografia({
+  id = 'fotografia',
+  urlActual,
+  archivo,
+  eliminarFotografia,
+  onArchivo,
+  onEliminar,
+  textoSubir = 'Subir foto',
+  textoQuitar = 'Quitar fotografía',
+}) {
   const inputRef = useRef(null);
   const [vistaPrevia, setVistaPrevia] = useState('');
 
@@ -50,19 +59,19 @@ function CampoFotografia({ urlActual, archivo, eliminarFotografia, onArchivo, on
 
   return (
     <div className="campo-fotografia">
-      <label htmlFor="fotografia" className="campo-fotografia__recuadro">
+      <label htmlFor={id} className="campo-fotografia__recuadro">
         {urlVisible ? (
           <>
             <img src={urlVisible} alt="" />
-            <span className="visually-hidden">Subir foto</span>
+            <span className="visually-hidden">{textoSubir}</span>
           </>
         ) : (
-          <span className="campo-fotografia__mensaje">Subir foto</span>
+          <span className="campo-fotografia__mensaje">{textoSubir}</span>
         )}
       </label>
       <input
         ref={inputRef}
-        id="fotografia"
+        id={id}
         className="campo-fotografia__input"
         type="file"
         accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
@@ -72,7 +81,7 @@ function CampoFotografia({ urlActual, archivo, eliminarFotografia, onArchivo, on
 
       {archivo || (urlActual && !eliminarFotografia) ? (
         <button type="button" className="boton-quitar-foto" onClick={quitarFotografia}>
-          Quitar fotografía
+          {textoQuitar}
         </button>
       ) : null}
     </div>
