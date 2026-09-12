@@ -1,6 +1,6 @@
 # VetFinder
 
-Plataforma web académica para consultar y mantener información de establecimientos veterinarios.
+Plataforma web para consultar y mantener información de establecimientos veterinarios.
 
 ## Descripción
 
@@ -111,7 +111,7 @@ El proyecto no declara un `engines` propio en `package.json`.
 1. Clonar el repositorio.
 
 ```bash
-git clone <url-del-repositorio>
+git clone https://github.com/MabelSE/vetfinder
 cd VetFinder
 ```
 
@@ -280,4 +280,4 @@ No forman parte de esta versión:
 
 ## Autoría
 
-VetFinder es un proyecto académico desarrollado por Mabel.
+VetFinder es un proyecto académico desarrollado por Mabel Soto Elgueta.
