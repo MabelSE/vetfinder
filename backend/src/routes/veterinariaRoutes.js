@@ -1,5 +1,9 @@
 import { Router } from 'express';
-import { listarVeterinarias, obtenerVeterinaria } from '../controllers/veterinariaController.js';
+import {
+  crearSolicitudVeterinaria,
+  listarVeterinarias,
+  obtenerVeterinaria,
+} from '../controllers/veterinariaController.js';
 import { listarValoracionesPublicas } from '../controllers/valoracionController.js';
 import { requerirAutenticacion } from '../middlewares/autenticacionMiddleware.js';
 import { requerirRol } from '../middlewares/autorizacionMiddleware.js';
@@ -8,6 +12,7 @@ import { veterinariaAdminRoutes } from './veterinariaAdminRoutes.js';
 
 export const veterinariaRoutes = Router();
 
+veterinariaRoutes.post('/', crearSolicitudVeterinaria);
 veterinariaRoutes.use(
   '/mia',
   requerirAutenticacion,

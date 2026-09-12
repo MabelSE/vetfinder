@@ -327,6 +327,36 @@ export async function obtenerVeterinariaAdminPorId(idVeterinaria) {
   };
 }
 
+export async function crearVeterinariaPendiente(cliente, {
+  idUsuario,
+  nombreComercial,
+  descripcion,
+  telefono,
+  correo,
+}) {
+  const resultado = await cliente.query(
+    `INSERT INTO veterinaria (id_usuario, nombre_comercial, descripcion, telefono, correo, estado_registro)
+     VALUES ($1, $2, $3, $4, $5, 'PENDIENTE')
+     RETURNING id_veterinaria`,
+    [idUsuario, nombreComercial, descripcion, telefono, correo]
+  );
+
+  return { idVeterinaria: resultado.rows[0].id_veterinaria };
+}
+
+export async function crearDireccionInicial(cliente, idVeterinaria, {
+  calle,
+  numero,
+  comuna,
+  region,
+}) {
+  await cliente.query(
+    `INSERT INTO direccion (id_veterinaria, calle, numero, comuna, region)
+     VALUES ($1, $2, $3, $4, $5)`,
+    [idVeterinaria, calle, numero, comuna, region]
+  );
+}
+
 export async function actualizarDatosGenerales(idVeterinaria, datos) {
   const resultado = await pool.query(
     `UPDATE veterinaria

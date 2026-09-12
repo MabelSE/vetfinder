@@ -108,6 +108,10 @@ function Registro() {
       <p>
         ¿Ya tienes cuenta? <Link to="/iniciar-sesion"><strong>Inicia sesión</strong></Link>
       </p>
+      <p>
+        ¿Administras una sucursal?{' '}
+        <Link to="/registro-veterinaria"><strong>Registrar veterinaria</strong></Link>
+      </p>
       </section>
     </main>
   );

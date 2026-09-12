@@ -34,6 +34,23 @@ export async function crearUsuarioPropietario({ nombre, apellido, correo, contra
   return mapearUsuario(resultado.rows[0]);
 }
 
+export async function crearUsuarioAdministradorVeterinaria(cliente, {
+  nombre,
+  apellido,
+  correo,
+  contrasena,
+  telefono,
+}) {
+  const resultado = await cliente.query(
+    `INSERT INTO usuario (nombre, apellido, correo, contrasena, telefono, rol, estado_cuenta)
+     VALUES ($1, $2, $3, $4, $5, 'ADMIN_VETERINARIA', 'ACTIVA')
+     RETURNING id_usuario, nombre, apellido, correo, contrasena, telefono, rol, estado_cuenta, fecha_registro`,
+    [nombre, apellido, correo, contrasena, telefono]
+  );
+
+  return mapearUsuario(resultado.rows[0]);
+}
+
 export async function listarUsuariosAdministracion() {
   const resultado = await pool.query(
     `SELECT u.id_usuario, u.nombre, u.apellido, u.correo, u.telefono, u.rol,

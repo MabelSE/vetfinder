@@ -5,6 +5,7 @@ import RutaInvitado from './components/RutaInvitado.jsx';
 import RutaProtegida from './components/RutaProtegida.jsx';
 import IniciarSesion from './pages/IniciarSesion.jsx';
 import Registro from './pages/Registro.jsx';
+import RegistroVeterinaria from './pages/RegistroVeterinaria.jsx';
 import Perfil from './pages/Perfil.jsx';
 import Veterinarias from './pages/Veterinarias.jsx';
 import FichaVeterinaria from './pages/FichaVeterinaria.jsx';
@@ -49,6 +50,14 @@ function App() {
           element={
             <RutaInvitado>
               <Registro />
+            </RutaInvitado>
+          }
+        />
+        <Route
+          path="/registro-veterinaria"
+          element={
+            <RutaInvitado>
+              <RegistroVeterinaria />
             </RutaInvitado>
           }
         />

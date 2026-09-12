@@ -1,3 +1,11 @@
+export function destinoTrasAutenticacion(rol) {
+  if (rol === 'ADMIN_VETERINARIA') {
+    return '/mi-veterinaria';
+  }
+
+  return '/perfil';
+}
+
 export function enlacesFuncionalesPorRol(rol) {
   if (rol === 'PROPIETARIO') {
     return [

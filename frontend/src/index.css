@@ -555,6 +555,41 @@ select:user-invalid:focus-visible {
   text-align: center;
 }
 
+.tarjeta-auth > p:not(.ayuda-auth):not(.mensaje-error) {
+  text-align: center;
+}
+
+.tarjeta-auth--amplia {
+  width: min(100%, 36rem);
+}
+
+.pagina--registro-veterinaria {
+  align-content: start;
+  padding-top: 1.5rem;
+  padding-bottom: 2rem;
+}
+
+.tarjeta-auth fieldset {
+  display: grid;
+  gap: 0.55rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0 0 0.85rem;
+  border: 0;
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.tarjeta-auth fieldset:last-of-type {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.tarjeta-auth legend {
+  padding: 0;
+  margin: 0 0 0.15rem;
+  font-weight: 700;
+}
+
 .ayuda-auth {
   color: var(--color-muted);
 }
@@ -1465,7 +1500,7 @@ button.boton-icono-circular {
 .tarjeta-veterinaria__descripcion {
   color: var(--color-muted);
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 3; 
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

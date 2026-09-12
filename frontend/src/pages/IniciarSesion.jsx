@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.js';
+import { destinoTrasAutenticacion } from '../utils/navegacion.js';
 
 function IniciarSesion() {
   const { iniciarSesion } = useAuth();
@@ -16,8 +17,8 @@ function IniciarSesion() {
     setEnviando(true);
 
     try {
-      await iniciarSesion({ correo, contrasena });
-      navigate('/perfil');
+      const perfil = await iniciarSesion({ correo, contrasena });
+      navigate(destinoTrasAutenticacion(perfil.rol));
     } catch (err) {
       setError(err.message);
     } finally {
@@ -64,6 +65,10 @@ function IniciarSesion() {
         </form>
         <p>
           ¿No tienes cuenta? <Link to="/registro"><strong>Crear una</strong></Link>
+        </p>
+        <p>
+          ¿Administras una sucursal?{' '}
+          <Link to="/registro-veterinaria"><strong>Registrar veterinaria</strong></Link>
         </p>
       </section>
     </main>

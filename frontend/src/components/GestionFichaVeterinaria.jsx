@@ -29,6 +29,7 @@ function GestionFichaVeterinaria({
   mostrarValoraciones = false,
   accionesEstado = null,
   navExtra = null,
+  avisoInicial = '',
 }) {
   const [veterinaria, setVeterinaria] = useState(null);
   const [serviciosCatalogo, setServiciosCatalogo] = useState([]);
@@ -243,6 +244,15 @@ function GestionFichaVeterinaria({
       </header>
 
       {navExtra}
+
+      {avisoInicial ? <p className="aviso">{avisoInicial}</p> : null}
+      {mostrarValoraciones
+        && veterinaria.estadoRegistro === 'PENDIENTE'
+        && (!veterinaria.horarios || veterinaria.horarios.length === 0) ? (
+          <p className="aviso aviso--advertencia">
+            Debes registrar al menos un horario de atención para que el SuperAdmin pueda aprobar tu veterinaria.
+          </p>
+        ) : null}
 
       <div className="pestanas-ficha" role="tablist" aria-label="Secciones de la veterinaria">
         {pestanas.map((pestana) => {

@@ -1,5 +1,14 @@
 import { solicitarApi } from './apiCliente.js';
 
+export async function solicitarRegistroVeterinaria(datos) {
+  const respuesta = await solicitarApi('/api/veterinarias', {
+    method: 'POST',
+    cuerpo: datos,
+  });
+
+  return respuesta.usuario;
+}
+
 export async function listarVeterinarias(filtros = {}) {
   const parametros = new URLSearchParams();
 

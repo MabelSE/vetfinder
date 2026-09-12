@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node --watch --env-file=.env src/app.js",
     "start": "node --env-file=.env src/app.js",
-    "test": "node --test src/utils/prioridadUrgencia.test.js src/utils/nombrePublico.test.js src/validators/valoracionValidator.test.js src/validators/veterinariaAdminValidator.test.js src/validators/superadminValidator.test.js"
+    "test": "node --test src/utils/prioridadUrgencia.test.js src/utils/nombrePublico.test.js src/validators/valoracionValidator.test.js src/validators/veterinariaAdminValidator.test.js src/validators/superadminValidator.test.js src/validators/solicitudVeterinariaValidator.test.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

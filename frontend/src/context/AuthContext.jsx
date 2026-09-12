@@ -1,6 +1,7 @@
 import { createContext, useCallback, useEffect, useMemo, useState } from 'react';
 import { cerrarSesion as cerrarSesionApi, iniciarSesion as iniciarSesionApi, registrarUsuario } from '../services/autenticacionService.js';
 import { actualizarPerfil as actualizarPerfilApi, obtenerPerfil } from '../services/usuarioService.js';
+import { solicitarRegistroVeterinaria } from '../services/veterinariaService.js';
 
 export const AuthContext = createContext(null);
 
@@ -42,6 +43,12 @@ export function AuthProvider({ children }) {
     return perfil;
   }, []);
 
+  const registrarVeterinaria = useCallback(async (datos) => {
+    const perfil = await solicitarRegistroVeterinaria(datos);
+    setUsuario(perfil);
+    return perfil;
+  }, []);
+
   const iniciarSesion = useCallback(async (datos) => {
     const perfil = await iniciarSesionApi(datos);
     setUsuario(perfil);
@@ -64,11 +71,12 @@ export function AuthProvider({ children }) {
       usuario,
       cargando,
       registrar,
+      registrarVeterinaria,
       iniciarSesion,
       cerrarSesion,
       actualizarPerfil,
     }),
-    [usuario, cargando, registrar, iniciarSesion, cerrarSesion, actualizarPerfil]
+    [usuario, cargando, registrar, registrarVeterinaria, iniciarSesion, cerrarSesion, actualizarPerfil]
   );
 
   return <AuthContext.Provider value={valor}>{children}</AuthContext.Provider>;
