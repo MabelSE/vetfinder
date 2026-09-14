@@ -1,10 +1,22 @@
-const VARIABLES_OBLIGATORIAS = ['DB_HOST', 'DB_PORT', 'DB_NAME', 'DB_USER', 'SESSION_SECRET'];
-
 export function validarEntorno() {
-  const faltantes = VARIABLES_OBLIGATORIAS.filter((nombre) => !process.env[nombre]);
+  const faltantes = [];
 
-  if (process.env.DB_PASSWORD === undefined) {
-    faltantes.push('DB_PASSWORD');
+  if (!process.env.SESSION_SECRET) {
+    faltantes.push('SESSION_SECRET');
+  }
+
+  const urlBaseDatos = process.env.DATABASE_URL?.trim();
+
+  if (!urlBaseDatos) {
+    ['DB_HOST', 'DB_PORT', 'DB_NAME', 'DB_USER'].forEach((nombre) => {
+      if (!process.env[nombre]) {
+        faltantes.push(nombre);
+      }
+    });
+
+    if (process.env.DB_PASSWORD === undefined) {
+      faltantes.push('DB_PASSWORD');
+    }
   }
 
   if (faltantes.length > 0) {

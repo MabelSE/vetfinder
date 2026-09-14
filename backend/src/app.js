@@ -1,3 +1,5 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import express from 'express';
 import { validarEntorno, obtenerPuerto, esProduccion } from './config/entorno.js';
 import { crearMiddlewareSesion } from './config/sesion.js';
@@ -46,6 +48,30 @@ app.use(
 app.use('/api/visitas', requerirAutenticacion, requerirRol('PROPIETARIO'), visitaRoutes);
 app.use('/api/valoraciones', valoracionRoutes);
 app.use('/api/mascotas', requerirAutenticacion, requerirRol('PROPIETARIO'), mascotaRoutes);
+
+if (esProduccion()) {
+  const directorioDist = path.join(path.dirname(fileURLToPath(import.meta.url)), '../../frontend/dist');
+
+  app.use(express.static(directorioDist));
+  app.use((req, res, next) => {
+    if (req.method !== 'GET' && req.method !== 'HEAD') {
+      next();
+      return;
+    }
+
+    if (req.path.startsWith('/api')) {
+      next();
+      return;
+    }
+
+    res.sendFile(path.join(directorioDist, 'index.html'), (error) => {
+      if (error) {
+        next(error);
+      }
+    });
+  });
+}
+
 app.use(noEncontradoMiddleware);
 app.use(errorMiddleware);
 
