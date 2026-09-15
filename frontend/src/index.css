@@ -36,12 +36,6 @@ html {
   max-width: 100%;
   overflow-x: clip;
   background-color: var(--color-fondo);
-  background-image:
-    radial-gradient(1180px 780px at 8% -12%, color-mix(in srgb, var(--color-primario) 16%, transparent), transparent 58%),
-    radial-gradient(980px 720px at 100% -8%, color-mix(in srgb, var(--color-acento) 14%, transparent), transparent 52%),
-    radial-gradient(920px 680px at 78% 118%, color-mix(in srgb, var(--color-secundario) 68%, transparent), transparent 58%);
-  background-attachment: fixed;
-  background-repeat: no-repeat;
 }
 
 body {
@@ -55,10 +49,31 @@ body {
 }
 
 #root {
+  position: relative;
+  z-index: 0;
   min-height: 100svh;
   max-width: 100%;
   overflow-x: clip;
   background: transparent;
+}
+
+/*
+  El degradado no puede ir en html con background-attachment: fixed:
+  en el CSS compilado de producción backdrop-filter no llega a muestrear ese fondo
+  y el vidrio queda semitransparente sin blur.
+*/
+#root::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: var(--color-fondo);
+  background-image:
+    radial-gradient(1180px 780px at 8% -12%, color-mix(in srgb, var(--color-primario) 16%, transparent), transparent 58%),
+    radial-gradient(980px 720px at 100% -8%, color-mix(in srgb, var(--color-acento) 14%, transparent), transparent 52%),
+    radial-gradient(920px 680px at 78% 118%, color-mix(in srgb, var(--color-secundario) 68%, transparent), transparent 58%);
+  background-repeat: no-repeat;
 }
 
 img {
@@ -84,7 +99,6 @@ a {
   position: sticky;
   top: 0;
   z-index: 1200;
-  isolation: isolate;
   padding: 0.9rem 1.25rem;
   border-bottom: 1px solid var(--vidrio-borde);
   background: var(--vidrio-fondo);
